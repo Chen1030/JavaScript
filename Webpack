@@ -1,0 +1,314 @@
+【webpack项目搭建】
+
+使用webpack、babel、react来创建React项目
+
+一、初始化项目
+mkdir my-app  先创建一个名字是my-app的文件夹
+cd my-app     进入该目录
+mkdir src     然后在my-app目录下创建src文件夹用来存放React代码
+npm init -y   使用npm命令初始化项目
+
+二、安装webpack
+(首先安装webpack和webpack-cli,webpack-cli包含了webpack的众多指令，所以需要安装)
+npm install webpack webpack-cli --save-dev
+
+三、安装Babel
+@babel/core          babel的核心
+@babel/preset-env    把es6的语法编译成es5的语法
+@babel/preset-react  识别JSX语法
+babel-loader         把不同的文件转化成我们想要的格式输出，或者说就是将我们的经过babel处理后的代码进行输出成浏览器可以识别的文件
+
+安装指令：
+npm install @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+
+安装成功后必须进行babel的配置，在根目录my-app建立.babelrc文件，然后写入以下配置：
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+
+webpack的配置：
+在根目录my-app建立webpack.config.js文件，然后写入以下配置：
+const path = require('path');
+module.exports = {
+  entry: './src/main.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      }
+    ]
+  }
+};
+
+四、处理html
+(安装html-webpack-plugin和html-loader)
+npm install html-webpack-plugin html-loader --save-dev
+
+(安装完成之后我们需要在webpack.config.js中进行配置)
+const path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+module.exports = {
+  entry: './src/main.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader'
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      titel: 'react app',
+      filename: 'index.html',
+      template: './src/index.html'
+    })
+  ]
+};
+
+
+(写react代码前需要安装react和react-dom)
+npm install react react-dom --save
+
+(App.js文件中创建一个组件并导出)
+import React from 'react'
+class App extends React.Component {
+  render() {
+    return(
+      <div>
+        <h1>Hello World</h1>
+      </div>
+    )
+  }
+}
+export default App
+
+
+(main.js中将组件导入并渲染)
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App.js'
+ReactDOM.render(<App/>, document.getElementById('app'))
+
+
+五、运行项目
+(运行前我们还要安装webpack-dev-server用来启动一个本地服务器来浏览我们的项目并且可以实现保存自动刷新)
+【'webpack-dev-server' 不是内部或外部命令，也不是可运行的程序】
+npm install webpack-dev-server --save-dev
+
+(然后在根目录的package.json中写一个脚本)
+"scripts": {
+    "start": "webpack-dev-server --open --mode development"
+}
+
+(最后运行npm run start)
+npm run start
+
+
+【less插件安装】
+npm install less  less-loader --save-dev
+npm install css-loader style-loader --save-dev
+
+
+
+【附件-package.json】
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "build/webpack.base.js",
+    "scripts": {
+        "watch": "webpack --config build/webpack.base.js --watch",
+        "build": "webpack --config build/webpack.prod.js --mode production",
+        "buildDev": "webpack --config build/webpack.dev.js --mode development",
+        "dev": "webpack --config build/webpack.dev.js --mode development & webpack-dev-server --config build/webpack.dev.js --open --mode development",
+        "start": "webpack-dev-server --config build/webpack.base.js --open --mode production"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/core": "^7.10.2",
+        "@babel/plugin-proposal-class-properties": "^7.10.1",
+        "@babel/preset-env": "^7.10.2",
+        "@babel/preset-react": "^7.10.1",
+        "autoprefixer": "^9.8.0",
+        "babel-loader": "^8.1.0",
+        "babel-plugin-import": "^1.13.0",
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^3.5.3",
+        "file-loader": "^6.0.0",
+        "html-loader": "^1.1.0",
+        "html-webpack-plugin": "^4.3.0",
+        "less": "^3.11.3",
+        "less-loader": "^6.1.0",
+        "postcss-loader": "^3.0.0",
+        "redux-devtools": "^3.5.0",
+        "style-loader": "^1.2.1",
+        "uglifyjs-webpack-plugin": "^2.2.0",
+        "url-loader": "^4.1.0",
+        "webpack": "^4.43.0",
+        "webpack-cli": "^3.3.11",
+        "webpack-command": "^0.4.2",
+        "webpack-dev-server": "^3.11.0",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+        "@babel/polyfill": "^7.10.1",
+        "antd": "^3.26.16",
+        "jquery": "^3.5.1",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0",
+        "react-redux": "^7.2.0",
+        "redux": "^4.0.5"
+    }
+}
+
+
+
+【附件-webpack.base.js】
+const path = require('path');
+const webpack = require('webpack');
+const HtmlPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const current = './';
+const prex = '../';
+const distStatic = 'static/';
+
+const resolve = dir => path.resolve(__dirname, prex + dir);
+
+module.exports = {
+    entry: {
+        index: current + 'src/main.js'
+    },
+    output: {
+        filename: distStatic + 'js/[name].[hash:8].js',
+        path: resolve('dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                loader: ['style-loader', 'css-loader', 'postcss-loader']
+            },
+            {
+                test: /\.less$/,
+                loader: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                    name: distStatic + 'images/[name].[hash:8].[ext]',
+                    fallback: 'file-loader'
+                }
+            },
+            {
+                test: /\.(js|jsx)$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/
+            }
+        ]
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new CleanWebpackPlugin(),
+        new HtmlPlugin({
+            template: 'index.html'
+        })
+    ],
+    performance: {
+        hints: false
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.less', '.css', '.svg'],
+        alias: {
+            src: resolve('src'),
+            views: resolve('src/views'),
+            assets: resolve('src/assets'),
+            common: resolve('src/common'),
+            myRedux: resolve('src/redux'),
+            components: resolve('src/components'),
+        }
+    }
+};
+
+
+
+【附件-webpack.dev.js】
+const config = require('./webpack.base');
+const merge = require('webpack-merge');
+
+const prex = '../';
+
+module.exports = merge(config, {
+    devtool: 'source-map',
+    devServer: {
+        proxy: {
+            '/dzgzpt-wsys/': 'http://10.199.153.18:8080'
+        },
+        contentBase: prex + 'dist',
+        port: 8081,
+        inline: true,
+        hot: true
+    }
+});
+
+
+
+【附件-webpack.prod.js】
+const config = require('./webpack.base');
+const merge = require('webpack-merge');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+module.exports = merge(config, {
+    plugins: config.plugins.concat(
+        new UglifyJsPlugin({
+            parallel: true,
+            uglifyOptions: {
+                ecma: 8,
+                output: {
+                    comments: false,
+                    beautify: false
+                }
+            },
+            cache: true,
+        })
+    ),
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    name: 'vendor',
+                    chunks: 'all',
+                    test: /[\\/]node_modules[\\/]/
+                }
+            }
+        }
+    }
+});
+
+
