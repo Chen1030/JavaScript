@@ -1,0 +1,256 @@
+【HTML规范】
+
+1、语言类型
+<html lang="zh">
+
+2、兼容IE低版本的浏览器
+ <!DOCTYPE html>
+ <!--[if lt IE 7]>  <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="zh"> <![endif]-->
+ <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="zh"> <![endif]-->
+ <!--[if IE 8]>    <html class="no-js lt-ie9" lang="zh"> <![endif]-->
+ <!--[if gt IE 8]>  <html class="no-js" lang="zh"> <![endif]-->
+
+3、添加视窗
+<meta name="viewport" content="width=device-width">
+
+4、设置IE兼容content="IE=Edge"
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+5、字符编码
+<meta charset="utf-8">
+
+6、关键字和描述
+<meta name="description" content="">
+<meta name="keywords" content="">
+
+7、标题和图标
+<title>HTML5 standardization</title>
+<link rel="shortcut icon" href="http://example.com/myicon.ico" />
+
+8、引用文件省略type
+<link href="style.css">
+<script src="js/demo.js"></script>
+
+9、省略协议http和https，除非已知不支持某个，css置于head中，js置于body底部
+<link href="//www.hengtiansoft.com/css/style.css">
+<script src="//www.hengtiansoft.com/js/demo.js"></script>
+
+10、使用4个空格的格式缩进，不要使用Tab
+
+11、待定项用TODO标记
+<!-- TODO(Tom) : del more items -->
+
+12、 每个html页面最大行数为500
+
+13、id、class使用中杠线来命名
+<div class="test-class" id="test-id"></div>
+
+14、块包含内，内不可含块，块与块并列，内嵌元素与内嵌元素并列，自闭合标签/结尾
+块级元素:
+address、blockquote、center、dir、div、dl、dt、dd、
+fieldset、form、h1~h6、hr、isindex、menu、noframes、
+noscript、ol、p、pre、table、ul 
+内嵌元素:
+a、abbr、acronym、b、bdo、big、br、cite、code、 
+dfn、em、font、i、img、input、kbd、label、q、s、samp、
+select、small、span、strike、 strong、sub、sup、textarea、tt、u、var
+
+15、使用data-* 方式自定义属性
+<div id="J-test" data-age="24"></div>
+
+16、使用语义化标签
+<section><h1>1</h1><p>2</p></section>
+
+17、图片需使用width/height/alt，不能用gif
+
+18、不能使用的元素的属性
+table：border、cellpadding、cellspacing、bgcolor、align
+body：background
+iframe：scrolling（H5仅支持src属性）
+
+
+【CSS规范】
+
+1、文件命名用下划线，属性样式命名用中划线
+
+2、通用样式命名规则
+（1）布局（grid） .g-：用于网页布局，如头部、尾部、主体、侧边栏、主栏等。
+（2）模块（module） .m-：用于定义可重用的整体，如列表、表格、选项卡、面板等。
+（3）元件（unit） .u-：用于定义可重用的个体，如按钮、输入框、图标等。
+（4）功能（function） .f-：定义一些常用的、有固定功能的样式，如清除浮动等。
+（5）状态 .z-：用于标识状态的样式，通常要与其他选择器配合使用，不单独定义。
+（6）皮肤（skin） .s-：定义皮肤型的样式，如背景色（图）、边框色、文字色等，一般只应用于换肤型网站。
+（7）特殊用途 .j-：该命名作为JS中的选择器使用，不允许用来定义CSS样式。 ##### 正确示例 /* 通用表格模块 / .m-tbl {} .m-tbl-hd {} .m-tbl-bd {} .m-tbl-ft {} / 定制企业表样式 / .co-tbl .col1 {} .co-tbl .col2 {} / 定制员工表样式 / .stf-tbl .col1 {} .stf-tbl .col2 {} .u-btn {} / 通用按钮原件 / .u-btn.z-dis {} / 不可操作的按钮样式 */
+
+3、属性值合并
+/* 未合并前 */
+.m-box {
+    background-image: url(../images/bg2.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #fff;
+}
+/* 合并后 */
+.m-box {
+    background: url("../images/bg2.jpg") no-repeat scroll center center 100% 100%  #fff;
+} 
+/* font-style, font-variant, font-weight, font-size, line-height, font-family */
+font: italic small-caps bold 12px/30px Georgia, serif;
+list-style: square outside url(bullet.gif);
+
+4、省略url中的引号，需要时用单引号
+
+5、颜色十六进制，需透明度的使用 rgba()
+
+6、样式顺序（浏览器私有属性在前，W3C 标准属性在后）
+（1）定位布局类等显示属性：display, visibility, position, float, clear, list-style, top 等
+（2）盒模型等自身属性：width, height, margin, padding, border, overflow 等
+（3）文本类及其它修饰类属性：font, text-align, text-decoration, vertical-align, white-space, color, background 等
+（4）最后是 CSS3 相关属性： border-radius, box-shadow, gradients, transforms, animations 等
+
+7、链接样式顺序
+a:link -> a:visited -> a:hover -> a:active
+
+8、尽量不用!important
+
+9、谨慎使用盒模型，尽量添加box-sizing属性。因为不同的浏览器默认计算盒模型高宽的方式不一样，容易产生样式的不统一。申明box-sizing的类型就能统一浏览器对盒模型的解析方式。
+
+10、减少ID选择器的使用
+
+11、@font-face要兼容IE6，7，8
+
+12、避免耗性能的属性，尽量不用非浏览器自带字体
+width: expression(this.width>100?'100px':'auto');
+filter: alpha(opacity=50);
+
+13、合并压缩图片提升性能，压缩css或js文件
+
+14、不适用全局选择器*定义样式
+
+
+【JS规范】
+
+1、不用document.write()
+
+2、对象声明用{}，不用new Object()
+
+3、数组Array声明用[]
+
+4、不使用原始包装类型声明变量，如new String('123')
+
+5、不用eval()，易导致脚本注入攻击
+
+6、不使用with语句
+
+7、不在循环里面进行DOM操作
+for(var i =0; i<length;i++){
+    $(".class").append(html);
+}
+
+8、对于多个同性质同辈节点，避免逐个进行事件绑定。而应该利用冒泡原理，将事件委托给父节点
+正确：$("table").on("click","td",function(){})
+错误：$("td").on("click",function(){})
+
+9、使用$.data(elem,key,value)的方式绑定数据。因为elem.data()方法是定义在jQuery函数的prototype对象上面的，而$.data()方法是定义jQuery函数上面的，调用的时候不从复杂的jQuery对象上调用，所以速度快得多
+
+10、布尔值的命名以'is'，'can'，'has'，'should'，'must'等状态词开头
+
+11、构造函数名使用帕斯卡命名法（首字母大写），数字申明的变量的命名要体现出该变量是数字
+
+12、申明的变量、方法、对象，对象属性、插件、API、代码块等都需要有注释来解释
+
+13、同一行方法调用或者表达式，换行后的另一行缩进8个空格
+
+14、表达式赋值语句换行，第二行要与等号后面的第一个变量对齐
+
+15、每个方法之间空一行、在方法的局部变量声明和方法的语句之间空一行
+
+16、运算符前后添加空格、字符串声明使用双引号
+
+17、对象属性名无引号，属性名后紧跟一个冒号，冒号后加一个空格跟属性的值
+
+18、js文件行数不要太长，最大行数为1000行
+
+19、js方法行数不要太长，最大行数为100行
+
+20、控制流声明if, for, while, switch, try最多嵌套3层
+
+21、不要使用制表符、strict模式需要谨慎使用
+
+22、常量和配置变量应该放在文件顶部
+
+23、当某段代码逻辑存在重复出现的情况，或者在某个作用域下面存在超过8个方法的时候，需要将代码抽象成对象的方式编写，便于二次使用，也避免不必要的代码重复，使代码更具可读性和高效性
+
+24、当实现某个方法需要使用大量参数的时候，要将该功能封装成一个对象，以配置方式传入参数，而不是写在方法参数里面，方法的最大参数长度为7
+
+25、使用面向对象的方式组织js代码
+
+26、不要进行浏览器嗅探方式判断浏览器客户端版本等信息，请使用特性检测，同时避免使用三方非特性检测方式判断浏览器客户端，以免判断不准确
+
+27、不要用null来判断方法的参数有没有提供，不要用null来判断未初始化的变量
+
+28、比较运算使用 === 和 !== , 不要使用 == 和 != 避免类型转换时产生的错误
+
+29、对于对象属性使用for ... in循环时，需要通过hasOwnProperty方法过滤非自身属性(继承而来的属性)
+for (name in object) {
+    if (object.hasOwnProperty(name)) {
+        doSomething(name);
+    }
+}
+
+30、不要使用位运算符：<<, >>, >>>, ~, &, |，因为js的位运算效率不如其它语言
+
+31、不要在循环内部创建方法，因为在循环体内部定义的方法只会有一个实例被定义，唯一改变的是方法的参数
+
+
+【JQuery】
+1、性能顺序：ID选择器 > 标签选择器 > 类选择器 > 属性选择器 > 伪类选择器
+
+2、有原生方法可以使用的场合，避免使用jQuery
+
+3、在绑定事件处理程序时使用一个命名空间，这样可以方便地取消绑定而不会影响其他绑定
+//事件绑定
+$("#myLink").on("click.mySpecialClick", myEventHandler);
+// 解除绑定
+$("#myLink").off("click.mySpecialClick");
+
+4、标准ajax请求，事件处理使用promise的写法
+//ajax模板
+var successHandler = function(){
+    //...
+};
+var failureHandler = function(){
+    //...
+};
+var alwaysFunc = function(){
+    //...
+};
+var jqxhr = $.ajax({
+    url: url,
+    type: "GET", // 默认为GET,你可以根据需要更改
+    data: {}, // 将请求参数放这里.
+    dataType: "json", // 指定想要的数据类型
+    statusCode: { // 如果你想处理各状态的错误的话
+        404: handler404,
+        500: handler500
+    }
+});
+jqxhr.done(successHandler);
+jqxhr.fail(failureHandler);
+jqxhr.always(alwaysFunc);
+
+5、移动端html模板
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta name="keywords" content="关键字，有助于SEO"/> 
+<meta name="description" content="对网页的介绍"/>
+<title>标题</title>
+
+6、移动端性能优化规范
