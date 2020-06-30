@@ -1,0 +1,106 @@
+【js基础】
+
+1、
+<!--[if IE 9]><script>alert("IE9");</script><![endif]--> 
+<!--[if IE 8]><script>alert("IE8");</script><![endif]-->
+<!--[if lte IE 8]><script>alert("IE8及IE8以下版本浏览器");</script><![endif]-->
+<!--[if gt IE 6]><script>alert("IE6以上版本浏览器(不含IE6)");</script><![endif]-->
+<!-- 以上这些代码写法都是针对ie各版本浏览器的，在其他浏览器中这些代码都会被解释为
+Html注释而直接无视掉，所以要想在Chrome之类的非ie浏览器，需要这么写： -->
+<!--[if !IE]>
+<!--><script>alert("非IE浏览器（不包括IE10及11）");</script><!-->
+<![endif]-->
+
+lt：小于当前版本
+lte：小于或等于当前版本，包括本身
+gt：大于当前版本
+gte：大于或等于当前版本，包括本身
+
+【ie8-背景图】
+<!--[if IE 8]>
+  <style>
+      .bg {
+          background: none\9;
+          filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../../images/deskTop/bg-header.png', sizingMethod=scale);
+      }
+  </style>
+<![endif]-->
+
+
+2、
+table 和 td 都设置：
+border-radius: 6px 6px 0 0;
+border-collapse: collapse/separate;
+
+td {
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+【垂直居中】
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+
+
+3、
+encodeURL() 不会对本身属性url的特殊字符进行编码，例如 冒号、正斜杠、问号、井号
+encodeURLComponent() 会对它发现的任何非标准字符进行编码
+
+
+
+
+
+/**
+ * html转义及防止javascript注入攻击
+ */
+// (js实现) 
+// 转义 元素的innerHTML内容即为转义后的字符
+function htmlEncode ( str ) {
+	var ele = document.createElement('span');
+	ele.appendChild( document.createTextNode( str ) );
+	return ele.innerHTML;
+}
+// 解析 
+function htmlDecode ( str ) {
+	var ele = document.createElement('span');
+	ele.innerHTML = str;
+	return ele.textContent;
+}
+
+// (jquery实现) 
+function htmlEncodeJQ ( str ) {
+    return $('<span/>').text( str ).html();
+}
+function htmlDecodeJQ ( str ) {
+    return $('<span/>').html( str ).text();
+}
+
+
+
+
+
+【笔记】
+/**
+ * 添加和移除事件 未考虑IE中作用域 event等于window.event
+ */
+var util = { 
+	addHandler: function(el, type, handler) {
+		if (el.addEventListener) {
+			el.addEventListener(type, handler, false);
+		} else if (el.attachEvent) {
+			el.attachEvent(type, handler);
+		} else {
+			el['on' + type] = handler;
+		}
+	},
+	removeHandler: function(el, type, handler) {
+		if (el.removeEventListener) {
+			el.removeEventListener(type, handler, false);
+		} else if (el.detachEvent) {
+			el.detachEvent('on' + type, handler);
+		} else {
+			el['on' + type] = null;
+		}
+	}
+}
