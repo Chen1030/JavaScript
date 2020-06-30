@@ -268,7 +268,7 @@ module.exports = merge(config, {
     devtool: 'source-map',
     devServer: {
         proxy: {
-            '/dzgzpt-wsys/': 'http://10.199.153.18:8080'
+            '/test-web/': 'http://ip:port'
         },
         contentBase: prex + 'dist',
         port: 8081,
