@@ -1,0 +1,1070 @@
+
+********************前端编码规范********************（将一些不太注意到的点记一下）
+【HTML规范】
+1.（命名）
+html的id、class(除data-自定义属性外)要使用中杠线来命名，如：test-class、test-id，避免驼峰法
+2.
+<!DOCTYPE html>
+<html lang="zh">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="zh"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang="zh"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="zh"> <![endif]-->
+<!--[if gt IE 8]>
+<html class="no-js" lang="zh"> <![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="shortcut icon" href="" />
+</head>
+3.
+块级元素不能与内嵌元素并列
+4.
+图片元素必须使用width和height属性
+<img src="" alt="图片" height="100" width="100" />
+
+【CSS】
+1.（命名）
+css文件命名采用小写字母、下划线_
+2.（命名）
+css选择器命名采用小写字母、中划线-，加上适当的命名空间（前缀）
+布局（grid）       .g-：用于网页布局，如头部、尾部、主体、侧边栏、主栏等。
+模块（module）  .m-：用于定义可重用的整体，如列表、表格、选项卡、面板等。
+元件（unit）       .u-：用于定义可重用的个体，如按钮、输入框、图标等。
+功能（function） .f-：定义一些常用的、有固定功能的样式，如清除浮动等。
+状态                   .z-：用于标识状态的样式，通常要与其他选择器配合使用，不单独定义。
+皮肤（skin）       .s-：定义皮肤型的样式，如背景色（图）、边框色、文字色等，一般只应用于换肤型网站。
+特殊用途             .j-：该命名作为JS中的选择器使用，不允许用来定义CSS样式。
+3.（命名）
+css样式命名不应包含颜色、位置等与现实效果相关的具体信息，如.red {}
+4.
+省略 url 中的引号，background: url(1.jpg) no-repeat
+5.
+谨慎使用盒模型，尽量添加box-sizing属性
+6.
+三层结构层级编写
+第一层：基础框架（common.css/ 栅格系统等）
+第二层：通用模块（网页主题/ 通用组件等）
+第三层：页面样式（布局/ 覆盖等）
+
+【JavaScript】
+1.（命名）
+布尔值的命名以'is'，'can'，'has'，'should'，'must'等状态词开头
+2.（命名）
+变量使用驼峰命名法，使用名词结构  var thisIsMyName
+方法使用驼峰命名法，使用动宾结构  function getName() {}
+常量大写字母，字母间使用下划线_  var MAX_COUNT = 1
+2.
+对象声明{ }，数组声明[ ]，不用包装数据类型申明变量，不用eval()，不用with，不在循环中操作DOM
+3.
+多个同性质同辈节点，利用冒泡原理，事件委托父节点
+4.
+不用null来判断方法的参数和变量初始化
+5.
+使用闭包或者命名空间避免全局空间污染
+//闭包方式
+(function (){
+    var someVar = null;
+}());
+//命名空间方式
+var school = {};
+school.students = {};
+(function(students) {
+    students.Subject = Subject;
+    students.Grade = Grade;
+})(school.students);
+6.
+for ... in循环对象属性时，hasOwnProperty过滤
+
+
+********************《JavaScript权威指南》********************（知识点梳理）
+一、
+1.数据类型
+原始类型：数字Number、字符串String、布尔值Boolean、null、undefined（typeof null === 'object'）
+对象类型：数组、函数、对象
+
+
+---------------------------------------------
+Math.pow(27, 1/3); // 指数、27的立方根
+Math.sqrt(4); // 4的平方根
+Math.round(); // 四舍五入
+Math.ceil(); // 向上取整
+Math.floor(); // 向下取整
+Math.abs(); // 绝对值
+Math.random(); // 随机数
+
+Infinity === Infinity 、Infinity != -Infinity 、NaN != NaN
+Number.POSITIVE_INFINITY
+Number.NEGATIVE_INFINITY
+Number.MAX_VALUE
+Number.MIN_VALUE
+NaN
+Number.NaN
+---------------------------------------------
+
+（字符串不可变，返回的是新字符串）
+var s = 'hello world';
+s.length;
+s[0]; // 'h'
+s[s.length - 1]; // 'd'
+s.charAt(indx/-indx); // 第几个字符
+s.substring(start, (end)); // 截取[start, end) 【参数都不能为负数，小的值为起始位置，大的值为结束位置】
+s.substr(start/-start, (len)); // 截取从start开始，返回len长的字符串【len不能为负数】
+s.slice(start, (end)); // 截取[start, end)【参数可为负数】
+s.concat('123'); // 拼接
+s.indexOf('xxx', (3)); // 字符首次出现位置，第二个参数指定从哪个位置开始查找
+s.lastIndexOf('xxx'); // 最后一次出现的位置
+s.toUpperCase(); // 大小写转换
+s.toLowerCase(); // 大小写转换
+s.localeCompare('xxx'); // 顺序比较 1表示s在后 0表示相等 -1表示s在前
+
+s.split('-'); // 按-符号截取生成数组返回
+s.replace('h', 'H'); // 替换
+---------------------------------------------
+
+var s= 'testing: 1, 2, 3';
+var pattern = /\d+/g; //匹配所有包含一个或多个数字的实例
+pattern.test(s); // true: 匹配成功
+s.search(pattern); // 9: 首次匹配成功的位置
+s.match(pattern); // ['1', '2', '3']: 所有匹配组成的数组
+s.replace(pattern, '#'); // 'testing: #, #, #'
+s.split(/\D+/); // ['', '1', '2', '3']: 用非数字字符截取字符串
+---------------------------------------------
+
+
+2.类型转换：
+值                     字符串                 数字         布尔值
+undefined  =>  'undefined'  =>  NaN  =>  false
+null            =>  'null'            =>  0       =>  false
+""               =>                     =>  0       =>  false
+"1"             =>                     =>  1       =>  true
+{ }               =>  toString()   valueOf()   =>  true
+[ ]               =>  ""                =>  0       =>  true
+function(){} =>  toString()     =>  NaN  =>  true
+
+!null           === true
+!undefined === true
+!""              === true
+!!{ }             === true
+!![ ]             === true
+!!fn             === true
+
+x + "" == String(x);
++x      == Number(x);
+!!x      == Boolean(x);
+
+null === null
+undefined === undefined
+NaN !== NaN
+null == undefined
+null !== undefined
+
+3.数字转字符串：
+toFixed() 小数点后指定位数
+toExponential() 指数计数法
+toPrecision() 有效数字位数，有效位数参数值小于整数部分个数则转为指数(16:十六进制)
+
+4.字符串转数字：
+parseInt() 第二个参数指定转换基数
+parseFloat()
+
+5.变量/作用域
+var a = 0, b = 1, c;
+function fn() {
+    var a = 1;
+    console.log(b);
+    var b = 2;
+}
+局部变量
+全局变量
+变量提升var
+
+4.属性访问
+var obj = { name: 'zs' }
+obj.name
+obj['name']
+
+5.运算符
+delete          删除可配置属性(var声明的变量不可配置，全局函数也不能删除)
+typeof          检测类型，返回值："undefined/object(含null,{},[])/boolean/number(含NaN)/string/function"
+void             返回undefined值
+,                  逗号运算符 for (var i = 0, j = 10; i < j; i++, j--) console.log(i + ' ' + j);
+instanceof    检测对象类
+in                检测属性是否存在 for(var i in obj/arr) （只能遍历可枚举属性）
+? :               三元运算符
+&&              (a === b) && console.log('=');
+||                var y = x1 || x2 || x3;
+
+6.throw语句，try/catch/finally，with语句(严格模式禁用)，debugger断点调试语句
+if (a !== b) throw new Error('wrong');
+try {
+} catch(e) {
+} finally {
+}
+
+
+二、对象
+1.对象属性特性：
+可写     writable
+可枚举  enumerable
+可配置  configurable
+
+2.创建对象：
+var obj1 = {};
+var obj2 = new Object();
+var obj3 = Object.create( {} )(继承某对象属性)/Object.create(Object.prototype)(同上2/3创建空对象);
+var obj4 = Object.create(null); // obj4不继承任何属性方法，如toString()
+【
+Bar.ptototype = Object.create( Foo.prototype );  // ES6 之前需要抛弃默认的 Bar.prototype
+Object.setPrototypeOf( Bar.prototype, Foo.prototype );  // ES6 开始可以直接修改现有的 Bar.prototype
+】
+
+3.原型继承：
+function inherit(o) {
+    if (o == null) throw TypeError();
+    if (Object.create) return Object.create(p);
+    var type = typeof o;
+    if (type !== 'object' && type !== 'function') throw TypeError();
+    function fn() {}
+    fn.prototype = o;
+    return new fn();
+}
+
+4.检测属性：
+in                                   检测可枚举的自有/继承属性
+hasOwnProperty()          检测是否是自有属性
+propertyIsEnumerable()  检测是否是自有属性且属性可枚举
+
+
+var o = { x: 1 }
+o.x !== undefined;  (true)
+'x' in o;  (true，in可以区分存在但值为undefined的属性，不能分辨实例或继承，for时继承属性不显示)
+o.hasOwnProperty('x');
+o.propertyIsEnumerable('y');  (false，y继承而来)
+Object.prototype.propertyIsEnumerable('toString');  (false，不可枚举)
+Object.getPrototypeOf(); // 遍历原型链获取属性
+
+5.存取器属性getter和setter(可继承)
+(1)
+var o = {
+    get name() {}
+    set name(val) {}
+}
+
+---------------------------------------------
+Object.create(obj); // 创建对象，继承自obj
+Object.getOwnPropertyDescriptor(o, 'xxx'); // 获取自有属性的描述
+Object.defineProperty(o, 'xxx', {value: true, writeable: true, enumerable: true, configurable: true}); // 定义对象属性特性
+Object.defineProperties(); // 定义多个对象属性特性
+Object.getPrototypeOf(o); // 获取对象o的原型
+Object.keys(); // 返回对象键组成的数组，包含所有可枚举属性
+Object.getOwnPropertyNames(o); // 获取所有自有属性名称，无论它们是否可枚举
+obj.hasOwnProperty('xxx'); // 是否有自有属性xxx
+obj.propertyIsEnumerable('xxx'); // 自有属性xxx是否可枚举
+obj.isPrototypeOf(o); // obj是否是o的原型，类似instanceof
+Object.isExtensible(); // 判断对象是否可扩展
+Object.preventExtensions();  // 将对象转为不可扩展
+Object.seal();
+Object.isSealed();
+Object.freeze();
+Object.isFrozen();
+
+【
+in 操作符会检查属性是否在对象及其原型链中
+hasOwnProperty() 只会检查属性是否在 obj 对象中，不会检查原型链
+
+Object.keys(..) 和 Object.getOwnPropertyNames(..) 都只会查找对象直接包含的属性
+】
+---------------------------------------------
+
+(2)
+数据属性：值、可写性、可枚举性
+存取器属性：读取、写入、可枚举性、可配置性（存储器属性不具有值特性和可写性）
+(3)
+获取特定属性描述符： Object.getOwnPropertyDescriptor({}, 'x'); 继承属性返回undefined
+定义属性特性：           Object.definedProperty({}, 'x', {value: 1, wirtable: true, enumerable: false, configurable: true});
+
+【
+wirtable:           决定是否可以修改属性的值
+configurable:    只要属性是可配置的，就可以使用 defineProperty(..) 方法来修改属性描述符，否则使用defineProperty会报错。
+	        configurable为false还会禁止删除这个属性（delete obj.x）
+enumerable:     这个描述符控制的是属性是否会出现在对象的属性枚举中，比如for..in 循环。
+	        如果把 enumerable 设置成 false，这个属性就不会出现在枚举中
+】
+
+(修改多个用Object.definedProperties())
+检测对象是否是另一个对象的原型：isPrototypeOf();
+(4)
+判断对象是否可扩展：Object.isExtensible();
+将对象转为不可扩展：Object.preventExtensions();  (禁止一个对象添加新属性并且保留已有属性。
+				            不可逆转，只影响对象本身扩展性，不影响其原型对象的扩展)
+将对象转为不可扩展：Object.seal();  (不可逆转，对象设置不可扩展、且自有属性设置为不可配置，但可写属性仍可写)
+                                Object.isSealed();  检测对象是否封闭
+                                Object.freeze();  (对象设置不可扩展，且自有属性设置为不可配置，且属性都为只读属性，存储器属性不受影响)
+                                Object.isFrozen(); 检测是否冻结
+
+
+6.对象原型/原型链
+function对象(构造函数)拥有prototype属性(指针)，prototype属性指向prototype对象(原型对象)；
+prototype对象拥有constructor属性(指针)，constructor指向function对象(constructor对象)。
+实例含有指向原型对象的内部指针
+
+【显式屏蔽：如果 foo 不直接存在于 myObject 中而是存在于原型链上层时 myObject.foo = "bar" 会出现的三种情况：】
+（1）如果在 [[Prototype]] 链上层存在名为 foo 的普通数据访问属性（参见第 3 章）并且没
+有被标记为只读（writable:false），那就会直接在 myObject 中添加一个名为 foo 的新
+属性，它是屏蔽属性。
+（2）如果在 [[Prototype]] 链上层存在 foo，但是它被标记为只读（writable:false），那么
+无法修改已有属性或者在 myObject 上创建屏蔽属性。如果运行在严格模式下，代码会
+抛出一个错误。否则，这条赋值语句会被忽略。总之，不会发生屏蔽。
+（3）如果在 [[Prototype]] 链上层存在 foo 并且它是一个 setter（参见第 3 章），那就一定会
+调用这个 setter。foo 不会被添加到（或者说屏蔽于）myObject，也不会重新定义 foo 这
+个 setter。
+【隐式屏蔽：obj={x: 1}  obj2=Object.create(obj); obj2.x++; => obj.x==1, obj2.x==2】
+
+
+例1.
+function Person () {}
+var person = new Person();
+Person.prototype.say = function() {
+    console.log('ok');
+}
+person.say();  // ok
+
+例2.
+function Person () {}
+var person = new Person();
+Person.prototype = {
+    say: function() {
+        console.log('ok');
+    }
+};
+person.say();  // TypeError: person.say is not a function
+
+例3.
+function Person () {}
+Person.prototype = {
+    say: function() {
+        console.log('ok');
+    }
+};
+var person = new Person();
+person.say();  // ok
+
+例1和例2：原型对象是为每个实例对象存储共享的方法和属性，所有的实例是共享同一个原型对象
+理解：例2中实例声明，person指向的是Person.prototype对象；
+然后下一步的Person.prototype是将指针指向了等号后面的新对象，而并非原来的原型对象。
+此时再person.say()，原来的原型对象中不存在say()方法，所以报错。
+
+/*
+function定义的对象拥有prototype属性
+new生成的对象没有prototype属性
+但是每个对象都有_proto_属性，非每个浏览器都有
+多数情况下obj._proto_ === obj.constructor.prototype，Object.create()
+_proto_待
+/*
+
+
+7.获取类属性 toString()
+function classof(o) {
+    if (o === null) return 'Null';
+    if (o === undefined) return 'Undefined';
+    return Object.prototype.toString.call(o).slice(8, -1);
+}
+
+
+8.序列化对象(深拷贝/浅拷贝)
+JSON.stringify(obj);
+JSON.parse(json);
+
+
+9.数组/字符串数组/遍历/判断/方法
+(1)
+var s = 'test';
+s.charAt(0);  // 返回t
+
+(2)
+for (var i = 0, len = arr.length; i < len; i++);
+for (var i in arr);  (遍历数组不一定是升序遍历)
+arr.forEach(function(val, indx, arr) {});
+例.
+var arr = [1, 2, 3, 4, 5];
+var sum = 0;
+arr.forEach(function(i) {
+    sum += i;
+});
+console.log(sum);
+
+(3)
+Array.isArray([ ]);  判断是否是数组
+var isArray = Array.isArray || function(o) {
+    return typeof o === 'object' && Object.prototype.toString.call(o) === '[object Array]';
+};
+console.log(isArray(arr));  // 返回true
+
+(4)
+Array.isArray(arr); // 是否是数组
+
+arr.push('1', '2');                      在数组尾部增加一个或多个元素
+arr.unshift('1', '2');                   在数组头部增加一个或多个元素
+arr.pop();                                从尾部开始删除，数组长度减少1并返回删除的值
+arr.shift();                                从头部开始删除，数组长度减少1并返回删除的值
+arr.join('-');                              数组元素转化为字符串并连接，返回字符串，不改变原数组
+arr.reverse();                            数组元素逆转，改变原数组
+arr.sort();                                 数组元素排序，改变原数组
+arr.concat('a', [6, 7]);                数组合并返回新数组，不改变原数组
+arr.slice(0, 3)/arr.slice(-3, -2);    返回子数组[1, 2, 3]/[3]，左闭右开，不改变原数组
+arr.splice(0, 2);                         删除或插入元素(指定删除个数为0则为插入元素)，返回删除元素组成的数组，参数1为起始位置，参数2为删除或插入个数，左闭右开，改变原数组
+arr.toString();                          输出逗号分隔的字符串
+arr.toLocaleString();                输出本地化字符串
+--------------------------------------------------------------------------------------
+arr.forEach(function(val, indx, arr) {});   遍历数组，改变原数组（通过try-catch里throw异常中止循环）
+arr.map(function(val, indx, arr) {});        映射数组，返回新数组，不改变原数组
+arr.filter(function(val, indx, arr) {});        过滤数组，返回子数组，不改变原数组（压缩稀疏数组）
+every(function(val, indx, arr) {});            检测数组，every是所有值都满足条件才返回true
+some(function(val, indx, arr) {});            检测数组，some是至少一个满足则true
+reduce(function(val1, val2, times, arr) {}, initVal)/reduceRight(); 
+                                                          化简数组，返回化简后的值，参1为化简函数，参2为初始值(无初始值会把数组第一个元素作为初始值)，reduceRight()从右到左处理
+indexOf(indx)/lastIndexOf(indx);                       搜索数组，第一个从头至尾搜索，第二个从尾至头搜索，都未找到返回-1
+
+例.
+arr.forEach(function(val, i, arrs) {
+    arrs = val + 1;
+});
+console.log(arr);  // arr为[2, 3, 4, 5, 6]
+
+例.
+var arr2 = arr.map(function(val) {
+    return val + 1;
+});
+console.log(arr2);  // arr2为[2, 3, 4, 5, 6]
+
+例.
+var arr2 = arr.filter(function(val) {
+    return val < 3;
+});
+console.log(arr2);  // arr2为[1, 2]
+
+例.
+var rs = arr.every(function(val) {
+    return val < 10;
+});
+console.log(rs);  // rs为true
+
+例.
+var rs = arr.some(function(val) {
+    return val % 2 === 0;
+});
+console.log(rs);  // rs为true
+
+例.
+var rs = arr.reduce(function(x, y) {
+    return x > y ? x : y;
+}, 0);
+console.log(rs);  // 求最大值rs为5
+例.
+var objs = [{x: 1, a: 1}, {y: 2, a: 2}, {z: 3, a: 3}];
+var  extend = function(o1, o2) {
+    for (var prop in o2) {
+        o1[prop] = o2[prop];
+    }
+    return o1;
+}
+var union = function(o1, o2) {
+    return extend(extend({}, o1), o2);
+}
+var rs1 = objs.reduce(union);
+var rs2 = objs.reduceRight(union);
+console.log(rs1);  // 返回{x: 1, a: 3, y: 2, z: 3}
+console.log(rs2);  // 返回{z: 3, a: 1, y: 2, x: 1}
+
+三、函数
+
+嵌套函数作为方法调用：其this值指向调用它的对象；【o.fn();】
+嵌套函数作为函数调用：其this值指向全局对象/undefined；【fn();】
+
+【this】如果要判断一个运行中函数的 this 绑定，就需要找到这个函数的直接调用位置。找到之后就可以顺序应用下面这四条规则来判断 this 的绑定对象。
+
+1. 由 new 调用？绑定到新创建的对象。
+2. 由 call 或者 apply（或者 bind）调用？绑定到指定的对象。
+3. 由上下文对象调用？绑定到那个上下文对象。
+4. 默认：在严格模式下绑定到 undefined，否则绑定到全局对象。
+
+（有些调用可能在无意中使用默认绑定规则。如果想“更安全”地忽略 this 绑定，可以使用一个 DMZ 对象，比如 ø = Object.create(null)，以保护全局对象）
+var obj = Object.create(null);
+Object.prototype.hasOwnProperty.call(obj, 'a')
+（箭头函数会继承外层函数调用的 this 绑定。这其实和代码中的 self = this 机制一样）
+
+1.
+方法链：方法的返回值是对象
+
+2. 
+toString()：大多返回函数源码，内置函数返回"[native code]"
+bind()：将函数绑定至某对象
+call()：参数为实参列表
+apply()：参数为数组
+(显示指定this指向，间接调用函数)
+例.
+fn.call(obj, a, b, c)
+fn.apply(obj, [a, b, c])
+fn.bind(obj) == fn; // fn(a, b) == fn.bind(obj)(a, b);
+
+（1）
+【call和apply是改变函数执行的作用域的，说的通俗点就是改变函数体内this的指向】
+
+（2）
+【bind这个方法会创建一个函数的实例，其this值会被绑定到传给bind()函数的值，返回一个函数】
+
+（3）
+【callee是一个指针，指向拥有这个argument对象的函数】
+例：
+function factorial(num){
+    if(num<=1){
+        return 1;
+    }else{
+        return num*arguments.callee(num-1)
+    }
+}
+
+（4）
+【caller这个属性保存着调用当前函数的函数的引用，如果是在全局作用域中调用当前函数，它的值为null。（为了实现松散的耦合也可以把inner.caller换成arguments.callee.caller）】
+例：
+function outer(){
+    inner();
+}
+function inner(){
+    console.log(inner.caller);
+}
+outer(); //显示outer的源代码
+
+
+
+3.
+函数参数中使用/* optional */强调形参可选
+可选参数初始化：a = a || [];
+
+4.
+实参对象：arguments（修改实参对象的值等于修改传入的参数值）
+
+5. 
+caller：返回一个函数的引用，这个函数调用了当前的函数
+callee：放回正在执行的函数本身的引用，它是arguments的一个属性，arguments.callee.length返回形参个数
+
+例. (a方法调caller，b方法调a方法，a.caller返回b方法引用，打印出b方法体)
+var a = function() { console.log(a.caller); }
+var b = function() { a(); }
+b();  // 返回f() { a(); }
+
+例. (callee)
+var a = function() { console.log(arguments.callee); }
+var b = function() { a(); }
+b();  // 返回a()函数本身引用 f() { console.log(arguments.callee); }
+
+例. (用于递归)，递归易栈溢出，将结果缓存在参数里返回
+function factorial(num){
+    if(num<=1){
+        return 1;
+    }else{
+        return num*arguments.callee(num-1);
+    }
+}
+
+6.
+自定义函数属性：
+a.num = 0;
+function a() { 
+    console.log(a.num++);
+}
+
+7.作为命名空间的函数(匿名函数)
+(function() {}());
+
+8.闭包
+例. (函数外访问函数内部变量)
+var val = 'out';
+function scope() {
+    var val = 'in';
+    function fn() {
+        return val;
+    }
+    return fn();
+}
+var rs = scope();
+console.log(rs);
+例. (函数外访问函数内部变量)
+var val = 'out';
+function scope() {
+    var val = 'in';
+    function fn() {
+        return val;
+    }
+    return fn;
+}
+var rs = scope()();
+console.log(rs);
+
+例. (全局变量放到匿名函数里，避免全局变量污染)
+var x = (function() {
+    var count = 0;
+    return function() {
+        return count++;
+    }
+}());
+var a = x;
+var b = x;
+console.log(a());  // 0
+console.log(a());  // 1
+console.log(b());  // 2
+console.log(b());  // 3
+
+例. (闭包定义定时器)
+var y = function() {
+    var count = 0;
+    return function() {
+        return count++;
+    }
+};
+var c = y();
+var d = y();
+console.log(c());  // 0
+console.log(c());  // 1
+console.log(d());  // 0
+console.log(d());  // 1
+
+
+四、正则表达式（贪婪、惰性）
+1.
+[...]      方括号内的任意字符
+[^...]    除了方括号内的任意字符
+.          除换行符和其它Unicode行终止符之外的任意字符
+\w       等价于[a-zA-Z0-9]（大写相反）
+\s        任何Unicode空白字符（大写相反）
+\d        等价于[0-9]（大写相反）
+[\b]      退格
+--------------------------------------------------------
+{n, m}/{n, }   匹配n~m次/多次
+?                 匹配0或1次
++                匹配1或多次
+*                 匹配0或多次
+--------------------------------------------------------
+|     选择
+()    组合
+--------------------------------------------------------
+^    匹配开头
+$     匹配结尾
+\b   词边界
+--------------------------------------------------------
+i     忽略大小写
+g    全局匹配
+m   多行匹配
+
+2.
+模式匹配的String方法：
+str.search();
+str.replace();
+str.match();
+str.split();
+
+3.
+RegExp对象的方法：
+var pattern = //ig;
+pattern.exec(str);
+pattern.test(str);
+
+
+********************《ECMAScript 6入门》********************（知识点简单梳理）
+一、
+1.
+let      声明变量，在块级作用域内有效，不存在变量提升或重复声明
+const  声明常量，变量指向的那个内存地址指针固定，数组/对象可变
+
+2.
+块级作用域内声明函数类似var声明变量，存在函数提升：
+例.
+function f() { console.log('I am outside!'); }
+(function () {
+    var f = undefined;
+    if (false) {
+        function f() { console.log('I am inside!'); }
+    }
+    f();
+}());
+
+3.
+顶层对象：浏览器环境指window对象，Node环境指global对象（ES5中顶层对象的属性与全局变量是等价）
+var命令和function命令声明的全局变量，依旧是顶层对象的属性
+let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性
+
+4. 解构赋值：
+
+(1)
+(解构不成功返回undefined)
+let [head, ...tail] = [1, 2, 3, 4];
+head // 1
+tail // [2, 3, 4]
+
+(2)
+具有 Iterator 接口，都可以采用数组形式的解构赋值：
+let [x, y, z] = new Set(['a', 'b', 'c']);
+
+(3)
+解构赋值允许指定默认值
+let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
+
+(4)
+对象(嵌套)解构赋值
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };  // baz = 'aaa'
+
+(5)
+字符串解构赋值
+const [a, b, c, d, e] = 'hello';  // a = 'h', b = 'e'
+let {length : len} = 'hello';     // len = 5
+
+(6)
+数值和布尔值解构赋值（等号右边是数值和布尔值，则会先转为对象，undefined和null无法转为对象）
+let {toString: s} = 123;
+s === Number.prototype.toString // true
+let {toString: s} = true;
+s === Boolean.prototype.toString // true
+
+(7)
+函数参数解构赋值
+function move({x = 0, y = 0} = {}) {
+  return [x, y];
+}
+move({x: 3, y: 8}); // [3, 8]
+
+(8)
+用途
+交换变量值：[x, y] = [y, x];
+函数返回数组：let [a, b, c] = example();
+函数返回对象：let { foo, bar } = example();
+函数参数定义：
+函数参数默认值：
+提取json数据：
+遍历Map结构：for (let [key, value] of map) { console.log(key + " is " + value); }
+加载模块的指定方法：const { aFunc, bFunc} = require("source-map");
+
+5. 字符串扩展：
+
+(1) 返回对应索引字符的Unicode 码
+JavaScript 内部，字符以 UTF-16 的格式储存，每个字符固定为2个字节
+4个字节：str.codePointAt(index);  (for...of循环会识别4字节字符)
+2个字节：str.charAt(index);
+例.
+let s = '[四字节的字]a';
+for (let ch of s) {
+  console.log(ch.codePointAt(0).toString(16));
+}
+
+(2) 返回对应字符
+String.fromCharCode(0x20BB7);  不识别4字节字符
+String.fromCodePoint(0x20BB7);  识别4字节字符
+
+(3) 字符串的遍历器接口
+for (let codePoint of 'foo') {
+  console.log(codePoint)
+}
+// "f"  "o"  "o"
+(4) 将字符的不同表示方法统一为同样的形式
+'\u01D1'.normalize() === '\u004F\u030C'.normalize();  // true
+
+(5)
+str.includes()：   返回布尔值，表示是否找到了参数字符串
+str.startsWith()：返回布尔值，表示参数字符串是否在原字符串的头部
+str.endsWith()： 返回布尔值，表示参数字符串是否在原字符串的尾部
+str.repeat()：      返回一个新字符串，表示将原字符串重复n次
+
+(6)
+str.padStart()：用于头部补全
+str.padEnd()： 用于尾部补全
+
+(7)
+模板字符串，反引号``
+
+(8)
+标签模板
+let a = 5;
+let b = 10;
+tag`Hello ${ a + b } world ${ a * b }`;  等同于  tag(['Hello ', ' world ', ''], 15, 50);
+
+(9)
+String.raw`Hi\n${2+3}!`;  // 返回 "Hi\\n5!"
+
+6. 正则扩展
+
+(1)
+u修饰符：处理四个字节的 UTF-16 编码
+RegExp.prototype.unicode属性
+pattern.unicode 判断是否设置u修饰符
+
+(2)
+y修饰符：与g修饰符类似，g修饰符只要剩余位置中存在匹配就可，而y修饰符确保匹配必须从剩余的第一个位置开始
+var s = 'aaa_aa_a';
+var r1 = /a+/g;
+var r2 = /a+/y;
+r1.exec(s);  // ["aaa"]
+r2.exec(s);  // ["aaa"]
+r1.exec(s);  // ["aa"]
+r2.exec(s);  // null
+
+RegExp.prototype.sticky属性
+pattern.sticky 判断是否设置y修饰符
+
+(3)
+RegExp.prototype.flags返回正则表达式的修饰符
+pattern.source 返回正文 /abc/ig.source;   // "abc"
+pattern.flags 返回修饰符 /abc/ig.flags;     // "gi"
+
+(4)
+s修饰符：匹配任意单个字符
+dotAll属性 判断是否设置s修饰符 pattern.dotAll;  // true
+
+
+7. 数值的扩展
+Number.isFinite();     判读数值是否为有限 (只对数值有效)
+Number.isNaN();      判断数值是否为NaN (只对数值有效)
+Number.isInteger();  用来判断一个数值是否为整数 (只对数值有效)
+Number.parseInt();/Number.parseFloat();  将全局方法移到Number对象上
+Number.EPSILON    常量，表示 1 与大于 1 的最小浮点数之间的差
+Number.MAX_SAFE_INTEGER / Number.MIN_SAFE_INTEGER 两个常量，用来表示-2^53到2^53这个js整数范围的上下限
+Number.isSafeInteger();  判断整数是否在上面范围之内
+Math.trunc();     用于去除一个数的小数部分，返回整数部分
+Math.sign();       用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值(正数+1/负数-1/参数为 0，返回0/参数为-0，返回-0/其他值，返回NaN)
+Math.cbrt();       用于计算一个数的立方根
+Math.clz32();      返回一个数的 32 位无符号整数形式有多少个前导 0
+Math.imul();       返回两个数以 32 位带符号整数形式相乘的结果，返回的也是一个32位的带符号整数
+Math.fround();   返回一个数的32位单精度浮点数形式
+Math.hypot();     返回所有参数的平方和的平方根
+Math.expm1(x);  返回 ex - 1，即Math.exp(x) - 1
+Math.log1p(x)();  返回1 + x的自然对数，即Math.log(1 + x)。如果x小于-1，返回NaN
+Math.log10(x);    返回以 10 为底的x的对数。如果x小于 0，则返回 NaN
+Math.log2(x);     返回以 2 为底的x的对数。如果x小于 0，则返回 NaN
+**                      指数运算符
+
+
+8. 函数扩展
+(1)
+允许为函数的参数设置默认值，参数默认值惰性求值，通常有默认值的参数应是函数的尾参数
+
+(2)
+函数的length属性：返回没有指定默认值的参数个数（如果设置了默认值的参数不是尾参数，那么length属性也不再计入后面的参数）
+
+(3)
+作用域：设置了参数的默认值，函数进行声明初始化时，参数会形成一个单独的作用域
+例.
+var x = 1;
+function f(x, y = x) {
+  console.log(y);
+}
+f(2);  // 2
+例.
+let x = 1;
+function f(y = x) {
+  let x = 2;
+  console.log(y);
+}
+f();  // 1
+(参数y = x形成一个单独作用域，这个作用域里面，x未定义，所以指向外层x)
+
+(4)
+rest参数：
+例.
+function add(...values) {
+    let sum = 0;
+    for (var val of values) {
+        sum += val;
+    }
+    return sum;
+}
+add(2, 5, 3) // 10
+
+(5)
+name属性：返回该函数的函数名，对象方法也有name属性
+
+(6)
+箭头函数：函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象
+var f = v => v;  等同于  var f = function (v) { return v; };
+var sum = (a, b) => { return a + b; }
+
+
+9. 数组的扩展
+(1) 扩展运算符
+... 数组/对象的扩展运算符：将一个数组/对象转为参数序列
+...[1, 2, 3]  => 1 2 3
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };  // x = 1  y = 2  z = { a: 3, b: 4 }
+
+(2) 应用 (注意浅拷贝)
+a. 复制数组：
+const a1 = [1, 2];
+const a2 = [...a1];
+b. 合并数组：
+[...arr1, ...arr2, ...arr3]
+c. 与解构赋值结合起来，用于生成数组：
+const [first, ...rest] = [1, 2, 3, 4, 5];
+d. 字符串：
+[...'hello'];  // [ "h", "e", "l", "l", "o" ]
+e. 任何Iterator接口的对象，都可以用扩展运算符转为真正的数组：Map 和 Set，Generator 函数
+
+(3)
+Array.from();  将类数组的对象/可遍历(Map,Set)的对象转为真正的数组
+例.
+Array.from('hello');  // ['h', 'e', 'l', 'l', 'o']
+例.
+let namesSet = new Set(['a', 'b']);
+Array.from(namesSet);  // ['a', 'b']
+
+(4)
+Array.of方法用于将一组值，转换为数组：Array.of(3, 11, 8);  // [3,11,8]
+
+(5)
+数组实例的copyWithin()：将指定位置的成员复制覆盖到其他位置，Array.prototype.copyWithin(target, start, end); (左闭右                                           开)，[1, 2, 3, 4, 5].copyWithin(0, 3);  // [4, 5, 3, 4, 5]
+                find()：         找出第一个符合条件的数组成员
+                findIndex()： 返回第一个符合条件的数组成员的位置，都不符合条件则返回-1
+                fill()：           使用给定值，填充一个数组，['a', 'b', 'c'].fill(7);  // [7, 7, 7]
+                includes()：   表示某个数组是否包含给定的值，返回一个布尔值
+                flat()：         将嵌套的数组“拉平”，[1, 2, [3, 4]].flat();  // [1, 2, 3, 4]
+                flatMap()：   对原数组的每个成员执行一个函数，然后对返回值组成的数组执行flat()，返回新数组，不改变原数                                         组。 (只能展开一层数组)
+
+(6) (for...of 遍历数组 或 entries.next()方式)
+entries()： 对键值对的遍历
+keys()：    对键名的遍历
+values()： 对键值的遍历
+
+(7）
+空位：空位是没有任何值，避免空位，Array(3);  // [, , ,]
+
+
+10. 对象的扩展
+(1) 
+简洁表示法：在对象之中，可直接写变量（属性名表达式与简洁表示法，不能同时使用）
+例.
+const foo = 'bar';
+const baz = {foo};
+console.log(baz);  // {foo: "bar"}
+
+例. (属性名为变量名，属性值为变量值)
+function f(x, y) {
+    return {x, y};
+}
+f(1, 2);  // {x: 1, y: 2}
+
+例. (方法简写)
+const o = {
+    method() {
+        return "Hello!";
+    }
+};
+
+(2)
+属性名表达式（属性名表达式与简洁表示法，不能同时使用）
+例.
+obj['f' + 'oo'] = 123;  // obj['f' + 'oo'] =>obj['foo']
+
+例. (表达式放在方括号内)
+let lastWord = 'last word';
+const a = {
+    'first word': 'hello',
+    [lastWord]: 'world'
+};
+a['first word'];  // "hello"
+a[lastWord];    // "world"
+a['last word'];  // "world"
+
+例. (定义方法名)
+let obj = {
+    ['h' + 'ello']() {
+        return 'hi';
+    }
+};
+obj.hello();  // hi
+
+(3)
+属性的可枚举性（所有 Class 的原型的方法都是不可枚举的）
+for...in：               忽略enumerable为false的属性，只遍历对象自身的和继承的可枚举的属性
+Object.keys()：     忽略enumerable为false的属性，返回对象自身的所有可枚举的属性的键名
+JSON.stringify()： 忽略enumerable为false的属性，只串行化对象自身的可枚举的属性
+Object.assign()：  忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性
+
+(4)
+属性的遍历
+for...in：                循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）
+Object.keys()：      返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名
+Object.getOwnPropertyNames(obj)：   返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属                                                              性）的键名
+Object.getOwnPropertySymbols(obj)： 返回一个数组，包含对象自身的所有 Symbol 属性的键名
+Reflect.ownKeys(obj)：                       返回一个数组，包含对象自身的所有键名，不管键名是 Symbol 或字符串，也不管是否                                                          可枚举
+
+(5)
+super关键字：指向当前对象的原型对象，只能用在对象的方法之中
+
+
+11. 对象新增方法
+(1)
+Object.is();  比较两个值是否相等，不同之处：+0不等于-0，NaN等于自身
+Object.assign(target, source1, source2);  用于对象的合并，将源对象的所有可枚举属性，复制到目标对象，浅拷贝，同名时源属性替换目标属性
+用途：为对象添加属性/方法，克隆对象，合并多个对象，为属性指定默认值
+
+【Object.assign是浅拷贝，外层不相等，内层对象相等】
+var aa = {a: {x: 2}};
+var bb = Object.assign({}, aa);
+aa === bb; // false
+aa.a === bb.a; // true
+aa.a.x = 3; => bb.a.x; // 3
+
+例.
+class Point {
+    constructor(x, y) {
+        Object.assign(this, {x, y});
+    }
+}
+
+例.
+Object.assign(SomeClass.prototype, {
+    someMethod(arg1, arg2) {},
+    anotherMethod() {}
+});
+
+(2)
+Object.getOwnPropertyDescriptors(); 返回指定对象所有自身属性（非继承属性）的描述对象
+
+(3)
+Object.keys();             返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名
+Object.values();           返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值
+Object.entries();          返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组
+Object.fromEntries();    是Object.entries()的逆操作，用于将一个键值对数组转为对象
+
+------------------------------------------------
+
+【版本控制】
+SVN：开放源代码的版本控制系统，多个人共同开发同一个项目，共用资源。
+GIT：分布式版本控制系统，用于敏捷高效地处理项目。它采用了分布式版本库的方式，不必服务器端软件支持，使源代码的发布和交流极其方便。
+
+【构建工具】
+npm：包管理器
+Grunt：配置驱动
+Gulp：代码驱动
+Webpack：单页面模块化管理和打包工具
+FIS3：百度团队产品，实现在多页应用中按需加载
+Rollup：模块打包工具，专注于ES6的模块化
+
+【框架】
+Miniui
+VueJS
+ReactJS
+
+【css】
+less：
+sass：
+
+【工具】
+RequireJS：JavaScript模块加载器
+artTemplate：javascript模板引擎
+
+【术语】
+SPA：Single Page Application 单页面应用
+SEO：Search Engine Optimization 搜索引擎优化
+REST：Representational State Transfer 表述性状态转移
